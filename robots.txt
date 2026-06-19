@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jamesjmandhan211.github.io/homeofficial-hth-com-cn/sitemap.xml
