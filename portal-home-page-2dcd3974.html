@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <title>资料整理与信息索引 · jiuyou</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f2f4f6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #2c3e4f;
+            padding: 2rem 1.2rem;
+        }
+
+        .page {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* hero 区域 */
+        .hero {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 2.8rem 2.2rem;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            margin-bottom: 2.4rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 530;
+            letter-spacing: -0.02em;
+            color: #1f2a36;
+            margin-bottom: 0.6rem;
+        }
+
+        .hero .sub {
+            display: block;
+            font-size: 1rem;
+            color: #5b6f82;
+            font-weight: 400;
+            margin-top: 0.2rem;
+        }
+
+        .hero p {
+            margin-top: 1.2rem;
+            font-size: 1rem;
+            color: #3f5568;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero .tagline {
+            background: #eef1f5;
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #2c4a6a;
+            margin-top: 1.4rem;
+            border: 1px solid #d6dee8;
+        }
+
+        /* 卡片网格 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2.4rem;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 1.8rem 1.6rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 0 0 1px #e6eaef;
+            transition: box-shadow 0.15s;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03), 0 0 0 1px #cdd6e1;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            font-weight: 520;
+            color: #1f2a38;
+            margin-bottom: 0.9rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid #eff2f7;
+        }
+
+        .card p, .card li {
+            font-size: 0.95rem;
+            color: #3a4d5e;
+        }
+
+        .card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .card ul li {
+            position: relative;
+            padding-left: 1.4rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .card ul li::before {
+            content: "·";
+            position: absolute;
+            left: 0.2rem;
+            color: #7f95ab;
+            font-weight: 600;
+        }
+
+        .card .meta-note {
+            display: block;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #6c8299;
+            border-left: 3px solid #d9e2ec;
+            padding-left: 0.9rem;
+        }
+
+        /* faq 摘要卡片——加宽 */
+        .faq-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 1.8rem 1.8rem 1.4rem 1.8rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 0 0 1px #e6eaef;
+            margin-bottom: 2.2rem;
+        }
+
+        .faq-card h3 {
+            font-size: 1.3rem;
+            font-weight: 520;
+            color: #1f2a38;
+            margin-bottom: 1.2rem;
+        }
+
+        .faq-item {
+            margin-bottom: 1.1rem;
+        }
+
+        .faq-item strong {
+            display: block;
+            font-weight: 520;
+            color: #2b4055;
+            margin-bottom: 0.2rem;
+            font-size: 0.98rem;
+        }
+
+        .faq-item p {
+            font-size: 0.93rem;
+            color: #3e566a;
+            margin-left: 0;
+        }
+
+        .faq-item .q-marker {
+            color: #748da3;
+            font-weight: 500;
+            margin-right: 0.3rem;
+        }
+
+        /* 提示条 + 链接嵌入 */
+        .notice-area {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 1.6rem 1.8rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 0 0 1px #e6eaef;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            justify-content: space-between;
+        }
+
+        .notice-area .text {
+            font-size: 0.95rem;
+            color: #2c4055;
+            flex: 1 1 70%;
+            margin-right: 0.8rem;
+        }
+
+        .notice-area .text a {
+            color: #2a5c87;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dashed #b5c9db;
+            transition: border 0.1s;
+        }
+
+        .notice-area .text a:hover {
+            border-bottom: 1px solid #2a5c87;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e9edf3;
+            border-radius: 40px;
+            padding: 0.2rem 1rem;
+            font-size: 0.75rem;
+            color: #395570;
+            white-space: nowrap;
+            border: 1px solid #d2dce9;
+            margin-top: 0.2rem;
+        }
+
+        .footer-note {
+            font-size: 0.85rem;
+            color: #6f829a;
+            border-top: 1px solid #dee4ed;
+            padding-top: 1.6rem;
+            margin-top: 0.5rem;
+            text-align: left;
+        }
+
+        .footer-note a {
+            color: #2a5c87;
+            text-decoration: none;
+            border-bottom: 1px dotted #b7cbde;
+        }
+
+        .footer-note a:hover {
+            border-bottom: 1px solid #2a5c87;
+        }
+
+        /* 响应式 */
+        @media (max-width: 660px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+
+            .hero {
+                padding: 2rem 1.2rem;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .notice-area {
+                flex-direction: column;
+            }
+
+            .notice-area .text {
+                margin-right: 0;
+                margin-bottom: 0.6rem;
+            }
+
+            body {
+                padding: 1rem 0.8rem;
+            }
+
+            .faq-card {
+                padding: 1.4rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+
+            .card {
+                padding: 1.4rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- hero 摘要 -->
+    <div class="hero">
+        <h1>
+            资料整理 · 信息索引
+            <span class="sub">jiuyou · 让归档与检索更自然</span>
+        </h1>
+        <p>
+            在每天成堆的链接、笔记和文档碎片里，我们常常需要一块安静的地方——<br>
+            把资料按自己的习惯收拢，再用一种轻巧的方式把它们找到。<br>
+            从个人知识库到团队项目归档，<strong>jiuyou</strong> 提供的是一套围绕「整理」而非「存储」的体验。
+        </p>
+        <span class="tagline">📂 把散落的信息收进索引</span>
+    </div>
+
+    <!-- 特点 + 亮点卡片 -->
+    <div class="card-grid">
+        <div class="card">
+            <h3>📌 按主题编织</h3>
+            <p>
+                不必纠结文件夹还是标签。在 <strong>jiuyou</strong> 里，你可以为每个兴趣或项目建立灵活的「索引面」——
+                把笔记、链接、短评直接挂上去，就像在笔记本里夹入一张便签。
+            </p>
+            <span class="meta-note">适合阅读笔记、清单整理、想法收集</span>
+        </div>
+        <div class="card">
+            <h3>🔗 引用不断链</h3>
+            <p>
+                保存一个网页或文档时，自动提取标题与来源摘要。即使原链接失效，你的备注和片段依然留存在索引中。
+            </p>
+            <span class="meta-note">对经常研究资料、追踪信息源的人尤为实用</span>
+        </div>
+        <div class="card">
+            <h3>📅 时间轴回顾</h3>
+            <p>
+                每条资料都会保留添加时刻与最后查阅时间。你可以按周、月查看自己整理过的内容——
+                既是一种回顾，也是一种温和的提醒。
+            </p>
+            <span class="meta-note">比单纯文件夹多一层时间记忆</span>
+        </div>
+        <div class="card">
+            <h3>⚡ 轻量同步</h3>
+            <p>
+                不必担心复杂配置。只要登录账户，你的索引会在不同设备间自动保持同步。
+                数据归属自己，可随时导出为纯文本或 CSV。
+            </p>
+            <span class="meta-note">适合在多台电脑或手机之间延续整理</span>
+        </div>
+    </div>
+
+    <!-- 使用建议 / 场景 -->
+    <div class="faq-card">
+        <h3>🧩 这样用 jiuyou，也许更顺手</h3>
+        <div class="faq-item">
+            <strong><span class="q-marker">▸</span> 日常收集</strong>
+            <p>看到一篇好文章、一段有用的论坛讨论，顺手把链接贴进索引，加一两句点评。日后再找，比翻浏览器历史记录快得多。</p>
+        </div>
+        <div class="faq-item">
+            <strong><span class="q-marker">▸</span> 项目资料归档</strong>
+            <p>为每个项目建一个索引页，把需求文档、参考案例、截图和灵感链接都放进去。项目结束后，索引本身就是一份整理报告。</p>
+        </div>
+        <div class="faq-item">
+            <strong><span class="q-marker">▸</span> 读书与学习</strong>
+            <p>每本书建一个短索引，摘录金句、记下疑问，再关联几篇相关的书评或播客。复习时不用重翻全书，扫一眼索引就够了。</p>
+        </div>
+        <div style="margin-top: 1.4rem; font-size: 0.92rem; color: #3f5a70; border-top: 1px solid #e8edf4; padding-top: 1.2rem;">
+            ⚡ 提示：不必追求完美分类，先存下再调整。整理的习惯比整理的工具更重要。
+        </div>
+    </div>
+
+    <!-- 访问说明 + 链接嵌入 -->
+    <div class="notice-area">
+        <div class="text">
+            如果你已经在使用 <a href="https://portal-home-jiuyou.com">jiuyou</a>，可以试试上面提到的场景；
+            如果还没有接触过，它的核心功能就是「为资料建立索引」—— 不强调存储容量，更在意组织和检索的流畅度。
+            访问 <a href="https://portal-home-jiuyou.com">jiuyou</a> 可以了解更多关于索引结构、隐私策略和导出方式的说明。
+        </div>
+        <span class="badge">资料整理工具 · 非存储平台</span>
+    </div>
+
+    <!-- 底部 → 真实克制的补充 + 重复链接 -->
+    <div class="footer-note">
+        <p>
+            <strong>jiuyou</strong> 适合日常资料整理场景，不承诺永久存储或文件备份。
+            建议定期将重要资料另存归档。你可以随时通过 <a href="https://portal-home-jiuyou.com">jiuyou</a> 官网了解最新更新与数据管理细节。
+        </p>
+        <p style="margin-top: 0.6rem;">
+            © 资料索引 · 本页仅为介绍用途，实际功能以产品为准。
+        </p>
+    </div>
+
+</div>
+</body>
+</html>
