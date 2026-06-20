@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>德州扑克游戏 · 策略与判断的牌桌</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background-color: #f4f9fc;
+            color: #163a3f;
+            line-height: 1.6;
+            padding: 0 1rem 2.5rem;
+        }
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+        }
+
+        /* 导航 */
+        .nav-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0 0.75rem;
+            border-bottom: 1px solid #caddde;
+        }
+        .nav-logo {
+            font-weight: 600;
+            font-size: 1.2rem;
+            letter-spacing: 0.02em;
+            color: #1e6b72;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .nav-logo::before {
+            content: "♠";
+            display: inline-block;
+            font-size: 1.4rem;
+            color: #2d8b94;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.8rem;
+            flex-wrap: wrap;
+            list-style: none;
+        }
+        .nav-links a {
+            color: #1d5f66;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 450;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s ease, color 0.2s;
+            padding-bottom: 0.2rem;
+        }
+        .nav-links a:hover {
+            border-bottom-color: #37a2ad;
+            color: #0c4148;
+        }
+
+        /* hero 区域 */
+        .hero {
+            margin: 2.5rem 0 2.2rem;
+            padding: 2rem 1.8rem;
+            background: linear-gradient(145deg, #e2f0f2 0%, #d2e9ec 100%);
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(40, 120, 130, 0.08);
+        }
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 550;
+            letter-spacing: -0.01em;
+            color: #0d4b52;
+            margin-bottom: 0.75rem;
+        }
+        .hero p {
+            max-width: 680px;
+            font-size: 1.05rem;
+            color: #1f555d;
+            margin-bottom: 1.5rem;
+        }
+        .hero-link-sentence {
+            font-size: 1rem;
+            background: #ffffffbe;
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .hero-link-sentence a {
+            color: #116b76;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 1px dashed #3f9ea9;
+        }
+        .hero-link-sentence a:hover {
+            color: #053f47;
+            border-bottom-style: solid;
+        }
+
+        /* 通用卡片网格 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0 2.8rem;
+        }
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.8rem 1.5rem 1.5rem;
+            box-shadow: 0 2px 10px rgba(52, 124, 133, 0.06);
+            border: 1px solid #dfeaec;
+            transition: box-shadow 0.2s, transform 0.15s;
+        }
+        .card:hover {
+            box-shadow: 0 6px 18px rgba(42, 115, 125, 0.08);
+            transform: translateY(-2px);
+        }
+        .card h3 {
+            font-size: 1.2rem;
+            font-weight: 550;
+            color: #17565f;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .card h3 i {
+            font-style: normal;
+            background: #e2f3f5;
+            width: 30px;
+            height: 30px;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #1d7d88;
+            font-size: 1.2rem;
+        }
+        .card p {
+            color: #254f55;
+            font-size: 0.95rem;
+        }
+
+        /* 三个场景模块（特殊网格） */
+        .scene-section {
+            margin: 2.2rem 0 1rem;
+        }
+        .scene-section h2 {
+            font-size: 1.6rem;
+            font-weight: 480;
+            color: #124c54;
+            border-left: 5px solid #329da9;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .scene-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
+        }
+        .scene-item {
+            background: white;
+            border-radius: 18px;
+            padding: 1.4rem 1.2rem;
+            border: 1px solid #d7e7ea;
+            transition: background 0.2s;
+        }
+        .scene-item h4 {
+            font-size: 1.1rem;
+            font-weight: 540;
+            color: #155c65;
+            margin-bottom: 0.3rem;
+        }
+        .scene-item p {
+            color: #2e6068;
+            font-size: 0.9rem;
+        }
+
+        /* 常见说明 / 简短FAQ */
+        .faq-block {
+            margin: 2.8rem 0 2rem;
+            background: #e7f3f5;
+            padding: 1.8rem 2rem;
+            border-radius: 24px;
+        }
+        .faq-block h2 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #0d535c;
+            margin-bottom: 1.2rem;
+        }
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+        .faq-item strong {
+            display: inline-block;
+            color: #1a5f69;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+        .faq-item p {
+            margin-left: 0.3rem;
+            color: #204b52;
+            font-size: 0.95rem;
+        }
+        .faq-item a {
+            color: #0d737f;
+            text-decoration: underline;
+            text-underline-offset: 0.2rem;
+            text-decoration-color: #8bc7d0;
+        }
+
+        /* 底部 */
+        .footer-note {
+            border-top: 1px solid #d2e3e6;
+            padding-top: 1.5rem;
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            color: #386d75;
+            font-size: 0.9rem;
+        }
+        .footer-note a {
+            color: #0f6d79;
+            text-decoration: none;
+            border-bottom: 1px dotted #7ab3bd;
+        }
+
+        /* 移动端微调 */
+        @media (max-width: 640px) {
+            .nav-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            .nav-links {
+                gap: 1.2rem;
+            }
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            .hero {
+                padding: 1.5rem 1rem;
+            }
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            .faq-block {
+                padding: 1.2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- 顶部导航 -->
+    <nav class="nav-bar">
+        <a href="#" class="nav-logo"><span>德州扑克</span></a>
+        <ul class="nav-links">
+            <li><a href="#">牌局</a></li>
+            <li><a href="#">策略</a></li>
+            <li><a href="#">场景</a></li>
+            <li><a href="#">说明</a></li>
+        </ul>
+    </nav>
+
+    <!-- 核心介绍 (hero) -->
+    <section class="hero">
+        <h1>判断、观察与一点运气</h1>
+        <p>
+            在牌桌中央，五张公共牌逐渐翻开，你手中的两张底牌始终只有你自己清楚。
+            下注、加注、弃牌——每一次选择都建立在你对牌面、对手和概率的理解之上。
+            不需要夸张的诈唬，也无需成倍的筹码，德州扑克游戏的核心始终是：在信息不完整时做出合理决策。
+        </p>
+        <div class="hero-link-sentence">
+            如果你刚接触或想重新感受这种牌局，可以了解 <a href="https://game-texasholdem.com" target="_blank" rel="noopener">德州扑克游戏</a> 的基本规则与常见术语。
+        </div>
+    </section>
+
+    <!-- 三个场景模块 (轻量叙事) -->
+    <section class="scene-section">
+        <h2>桌上可能发生的片段</h2>
+        <div class="scene-grid">
+            <div class="scene-item">
+                <h4>翻牌前</h4>
+                <p>小盲与大盲落下底注，每人拿到两张底牌。有人加注，有人弃牌，牌桌开始流动。</p>
+            </div>
+            <div class="scene-item">
+                <h4>翻牌圈</h4>
+                <p>三张公共牌出现在桌面。牌面组合开始成形，顺子或同花的可能逐渐清晰。</p>
+            </div>
+            <div class="scene-item">
+                <h4>河牌之后</h4>
+                <p>最后一张公共牌揭示，底池的归属取决于谁组合出最强的五张牌。摊牌时刻。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 特点卡片：轻量介绍 -->
+    <div class="card-grid">
+        <div class="card">
+            <h3><i>♢</i> 手牌范围</h3>
+            <p>每一手牌在翻牌前都可以根据位置和底池赔率建立合理的入局范围，这不是直觉，而是统计。</p>
+        </div>
+        <div class="card">
+            <h3><i>♤</i> 位置意识</h3>
+            <p>按钮位、小盲、大盲、枪口……每个位置意味着信息量的不同。后位玩家拥有更多观察时间。</p>
+        </div>
+        <div class="card">
+            <h3><i>♧</i> 底池控制</h3>
+            <p>下注大小决定了对手跟注的赔率，也控制着风险。德州扑克中，每一条街都是一次微调。</p>
+        </div>
+    </div>
+
+    <!-- 常见说明 (FAQ 摘要) -->
+    <section class="faq-block">
+        <h2>一些常见的疑问</h2>
+        <div class="faq-item">
+            <strong>同花和顺子哪个更难出现？</strong>
+            <p>从概率上，同花比顺子稍微少见，但两者都取决于公共牌结构。初学者可以先记住：同花需要五张同花色，顺子需要五张连续点数。</p>
+        </div>
+        <div class="faq-item">
+            <strong>位置真的很重要吗？</strong>
+            <p>是的。在翻牌后，处于后位的玩家能看到其他玩家的行动再决策，这种信息优势会直接影响胜率。如果你想了解更多，可以查看 <a href="https://game-texasholdem.com" target="_blank" rel="noopener">德州扑克游戏</a> 中的基础位置说明。</p>
+        </div>
+        <div class="faq-item">
+            <strong>新手该从什么开始？</strong>
+            <p>不必一开始就学习复杂的诈唬或范围平衡。先理解手牌强弱、公共牌结构以及下注轮次，就能在牌桌上有一份清晰的思路。</p>
+        </div>
+    </section>
+
+    <!-- 底部 -->
+    <div class="footer-note">
+        <span>© 2025 · 牌桌笔记</span>
+        <span>关于 <a href="https://game-texasholdem.com" target="_blank" rel="noopener">德州扑克游戏</a> 的更多内容可自行探索。</span>
+    </div>
+
+</div>
+</body>
+</html>
